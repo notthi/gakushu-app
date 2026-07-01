@@ -3,6 +3,8 @@
 100ます計算タイムアタックと、小学3年生の漢字れんしゅうができるWebアプリ。
 サーバー不要・データはブラウザ内(localStorage)に保存されます。
 
+**公開URL: https://notthi.github.io/gakushu-app/**
+
 ## 機能
 
 ### 🔢 100ますけいさん
@@ -22,9 +24,9 @@
 
 ## 使い方
 
-- **PC / Chromebook(ローカル):** `index.html` をChromeで開くだけ
-- **スマホでも使う場合:** GitHub Pages や Netlify などで公開し、そのURLを開く
-  - Chromeのメニューから「ホーム画面に追加」でアプリのように使える
+- 上の公開URLをChromeで開く(Chromebook・スマホ共通)
+- スマホはChromeのメニューから「ホーム画面に追加」でアプリのように使える
+- ローカルで試す場合は `index.html` をChromeで開くだけでも動く
 
 ## ファイル構成
 
