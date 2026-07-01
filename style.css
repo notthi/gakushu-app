@@ -1,0 +1,132 @@
+* { box-sizing: border-box; touch-action: manipulation; }
+
+body {
+  margin: 0;
+  font-family: "Hiragino Maru Gothic ProN", "BIZ UDGothic", "Yu Gothic UI", "Meiryo", sans-serif;
+  background: linear-gradient(160deg, #e3f6ff 0%, #fff9e3 100%);
+  min-height: 100vh;
+  color: #333;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; padding: 12px; max-width: 520px; margin: 0 auto; }
+.screen.active { display: block; }
+.hidden { display: none !important; }
+
+.app-title { text-align: center; font-size: 28px; margin: 24px 0 8px; color: #1976d2; }
+h2 { text-align: center; font-size: 22px; margin: 12px 0; color: #1976d2; }
+h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dotted #f5b942; padding-bottom: 2px; }
+
+.panel { padding: 4px; }
+.note { text-align: center; color: #777; font-size: 14px; margin: 10px 0 4px; }
+
+.menu { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; }
+
+.big-btn {
+  display: block; width: 100%; max-width: 340px; margin: 8px auto;
+  padding: 16px 12px; font-size: 20px; font-weight: bold;
+  border: none; border-radius: 16px; cursor: pointer;
+  background: #fff; color: #333;
+  box-shadow: 0 4px 0 #ccc;
+}
+.big-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #ccc; }
+.big-btn.go   { background: #4fc3f7; color: #fff; box-shadow: 0 4px 0 #0288d1; }
+.big-btn.go:active { box-shadow: 0 1px 0 #0288d1; }
+.big-btn.go2  { background: #aed581; color: #33511a; box-shadow: 0 4px 0 #7cb342; }
+.big-btn.go2:active { box-shadow: 0 1px 0 #7cb342; }
+
+.text-btn {
+  display: block; margin: 14px auto 4px; padding: 8px 16px;
+  background: none; border: none; color: #1976d2; font-size: 15px; cursor: pointer;
+}
+
+.choice-row { display: flex; justify-content: center; gap: 8px; margin: 6px 0 14px; }
+.chip {
+  padding: 10px 16px; font-size: 16px; font-weight: bold;
+  border: 2px solid #bbb; border-radius: 20px; background: #fff; color: #555; cursor: pointer;
+}
+.chip.sel { border-color: #f57c00; background: #ffe0b2; color: #e65100; }
+
+.best-info { text-align: center; font-size: 15px; color: #e65100; min-height: 22px; margin: 8px 0; }
+
+.play-head {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 480px; margin: 0 auto 6px;
+}
+.timer { font-size: 24px; font-weight: bold; color: #e65100; font-variant-numeric: tabular-nums; }
+
+/* --- 100ます グリッド --- */
+#hm-grid { display: grid; gap: 2px; justify-content: center; margin: 4px auto; }
+.hm-cell {
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; border-radius: 4px; position: relative;
+  font-weight: bold; overflow: hidden;
+}
+.hm-cell.head { background: #ffe0b2; color: #e65100; }
+.hm-cell.corner { background: #f57c00; color: #fff; }
+.hm-cell.cur { outline: 3px solid #ff9800; background: #fff8dc; z-index: 1; }
+.hm-cell.wrong { background: #ffcdd2; color: #b71c1c; }
+.hm-cell.right { background: #dcedc8; }
+.hm-cell .ans { position: absolute; bottom: 0; right: 2px; font-size: 0.55em; color: #d32f2f; font-weight: normal; }
+
+/* --- テンキー --- */
+#hm-keypad {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  max-width: 300px; margin: 10px auto;
+}
+#hm-keypad button {
+  font-size: 24px; font-weight: bold; padding: 12px 0;
+  border: none; border-radius: 12px; background: #fff; cursor: pointer;
+  box-shadow: 0 3px 0 #ccc; color: #333;
+}
+#hm-keypad button:active { transform: translateY(2px); box-shadow: 0 1px 0 #ccc; }
+#hm-keypad button.func { background: #4fc3f7; color: #fff; box-shadow: 0 3px 0 #0288d1; font-size: 18px; }
+
+.result-box {
+  background: #fff; border: 3px solid #4fc3f7; border-radius: 14px;
+  padding: 12px; margin: 6px auto 10px; max-width: 420px; text-align: center;
+}
+.result-box .r-time { font-size: 28px; font-weight: bold; color: #e65100; }
+.result-box .r-score { font-size: 20px; margin: 4px 0; }
+.result-box .r-msg { font-size: 16px; color: #1976d2; font-weight: bold; margin: 6px 0; }
+.result-box .big-btn { padding: 10px; font-size: 17px; margin: 6px auto; }
+
+/* --- 漢字 --- */
+.kj-word { text-align: center; font-size: 52px; margin: 24px 0 4px; letter-spacing: 4px; }
+.kj-word .target { color: #d32f2f; border-bottom: 4px solid #d32f2f; }
+#kj-choices { display: flex; flex-direction: column; gap: 10px; max-width: 340px; margin: 10px auto; }
+.choice-btn {
+  padding: 14px; font-size: 22px; font-weight: bold;
+  border: 3px solid #90caf9; border-radius: 14px; background: #fff; cursor: pointer; color: #333;
+}
+.choice-btn:disabled { opacity: 1; }
+.choice-btn.ok { border-color: #43a047; background: #dcedc8; }
+.choice-btn.ng { border-color: #e53935; background: #ffcdd2; }
+.kj-feedback { text-align: center; font-size: 22px; font-weight: bold; min-height: 80px; margin-top: 10px; }
+.kj-feedback .fb-ok { color: #43a047; }
+.kj-feedback .fb-ng { color: #e53935; }
+
+.gauge { background: #eee; border-radius: 10px; height: 20px; max-width: 340px; margin: 8px auto 2px; overflow: hidden; }
+.gauge-fill { height: 100%; width: 0; background: linear-gradient(90deg, #aed581, #66bb6a); border-radius: 10px; transition: width .5s; }
+
+.nigate-item {
+  display: inline-block; background: #fff; border: 2px solid #ef9a9a; border-radius: 10px;
+  padding: 8px 12px; margin: 4px; font-size: 18px;
+}
+.nigate-item small { color: #777; }
+
+/* --- きろく --- */
+.rec-table { width: 100%; max-width: 400px; margin: 4px auto; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
+.rec-table th, .rec-table td { padding: 8px 6px; text-align: center; font-size: 15px; border-bottom: 1px solid #eee; }
+.rec-table th { background: #ffe0b2; color: #e65100; }
+
+#rec-cal { max-width: 340px; margin: 6px auto; background: #fff; border-radius: 12px; padding: 8px; }
+.cal-title { text-align: center; font-weight: bold; color: #1976d2; margin-bottom: 4px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal-cell { text-align: center; padding: 6px 0; font-size: 14px; border-radius: 50%; }
+.cal-cell.dow { color: #999; font-size: 12px; }
+.cal-cell.stamp { background: #ffcc80; font-weight: bold; }
+.cal-cell.today { outline: 2px solid #4fc3f7; }
+
+.hist-item { background: #fff; border-radius: 10px; padding: 8px 12px; margin: 5px auto; max-width: 400px; font-size: 15px; }
+.hist-item .h-date { color: #999; margin-right: 8px; }

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#4fc3f7">
+<title>がくしゅうアプリ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ホーム -->
+<section id="screen-home" class="screen active">
+  <h1 class="app-title">📚 がくしゅうアプリ</h1>
+  <p id="home-message" class="note"></p>
+  <div class="menu">
+    <button class="big-btn go" onclick="show('screen-hyakumasu')">🔢 100ますけいさん</button>
+    <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう(3年生)</button>
+    <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
+  </div>
+  <button id="sound-toggle" class="text-btn" onclick="toggleSound()">🔊 おと:ON</button>
+</section>
+
+<!-- 100ます計算 -->
+<section id="screen-hyakumasu" class="screen">
+
+  <div id="hm-setup" class="panel">
+    <h2>🔢 100ますけいさん</h2>
+    <p class="note">けいさんの しゅるい</p>
+    <div class="choice-row" id="hm-mode-row">
+      <button data-mode="add" class="chip sel">たし算</button>
+      <button data-mode="sub" class="chip">ひき算</button>
+      <button data-mode="mul" class="chip">かけ算</button>
+    </div>
+    <p class="note">ますの かず</p>
+    <div class="choice-row" id="hm-size-row">
+      <button data-size="10" class="chip sel">100ます</button>
+      <button data-size="5" class="chip">25ます</button>
+    </div>
+    <div id="hm-best-info" class="best-info"></div>
+    <button class="big-btn go" onclick="hmStart()">スタート!</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="hm-play" class="panel hidden">
+    <div class="play-head">
+      <span id="hm-timer" class="timer">0.0びょう</span>
+      <button class="text-btn" onclick="hmQuit()">やめる</button>
+    </div>
+    <div id="hm-result" class="result-box hidden"></div>
+    <div id="hm-grid"></div>
+    <div id="hm-keypad"></div>
+  </div>
+
+</section>
+
+<!-- 漢字れんしゅう -->
+<section id="screen-kanji" class="screen">
+
+  <div id="kj-menu" class="panel">
+    <h2>✏️ かんじれんしゅう(3年生)</h2>
+    <div class="gauge"><div id="kj-gauge-fill" class="gauge-fill"></div></div>
+    <div id="kj-gauge-text" class="note"></div>
+    <button class="big-btn go" onclick="kjStart('normal')">ドリル スタート(10もん)</button>
+    <button class="big-btn go2" onclick="kjStart('nigate')">にがて とっくん</button>
+    <button class="big-btn" onclick="kjShowNigate()">📕 にがてちょう</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="kj-quiz" class="panel hidden">
+    <div class="play-head">
+      <span id="kj-progress" class="timer"></span>
+      <button class="text-btn" onclick="kjQuit()">やめる</button>
+    </div>
+    <div id="kj-word" class="kj-word"></div>
+    <p class="note">よみかたは どれかな?</p>
+    <div id="kj-choices"></div>
+    <div id="kj-feedback" class="kj-feedback"></div>
+  </div>
+
+  <div id="kj-result" class="panel hidden">
+    <h2 id="kj-result-title"></h2>
+    <div id="kj-result-body"></div>
+    <button class="big-btn go" onclick="kjStart(KJ.drillType)">もういちど</button>
+    <button class="big-btn" onclick="kjBackToMenu()">かんじメニューへ</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="kj-nigate" class="panel hidden">
+    <h2>📕 にがてちょう</h2>
+    <div id="kj-nigate-list"></div>
+    <button class="big-btn go2" onclick="kjStart('nigate')">にがて とっくん</button>
+    <button class="text-btn" onclick="kjBackToMenu()">← もどる</button>
+  </div>
+
+</section>
+
+<!-- きろく -->
+<section id="screen-records" class="screen">
+  <div class="panel">
+    <h2>🏆 きろく</h2>
+
+    <h3>100ます じこベスト</h3>
+    <table id="rec-best" class="rec-table"></table>
+
+    <h3>かんじ(3年生)</h3>
+    <div class="gauge"><div id="rec-kj-fill" class="gauge-fill"></div></div>
+    <div id="rec-kj-text" class="note"></div>
+
+    <h3>れんしゅうカレンダー</h3>
+    <div id="rec-cal"></div>
+
+    <h3>さいきんの きろく</h3>
+    <div id="rec-history"></div>
+
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+</section>
+
+<script src="kanji_data_g3.js"></script>
+<script src="app.js"></script>
+<script src="hyakumasu.js"></script>
+<script src="kanji.js"></script>
+</body>
+</html>
