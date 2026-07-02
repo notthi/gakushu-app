@@ -17,7 +17,7 @@
   <p id="home-message" class="note"></p>
   <div class="menu">
     <button class="big-btn go" onclick="show('screen-hyakumasu')">🔢 100ますけいさん</button>
-    <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう(3年生)</button>
+    <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう</button>
     <button class="big-btn go3" onclick="show('screen-map')">🗾 ちずパズル</button>
     <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
   </div>
@@ -61,7 +61,13 @@
 <section id="screen-kanji" class="screen">
 
   <div id="kj-menu" class="panel">
-    <h2>✏️ かんじれんしゅう(3年生)</h2>
+    <h2 id="kj-menu-title">✏️ かんじれんしゅう</h2>
+    <p class="note">がくねんを えらんでね</p>
+    <div class="choice-row" id="kj-grade-row">
+      <button data-grade="1" class="chip" onclick="kjSetGrade(1)">1年生</button>
+      <button data-grade="2" class="chip" onclick="kjSetGrade(2)">2年生</button>
+      <button data-grade="3" class="chip" onclick="kjSetGrade(3)">3年生</button>
+    </div>
     <div class="gauge"><div id="kj-gauge-fill" class="gauge-fill"></div></div>
     <div id="kj-gauge-text" class="note"></div>
     <button class="big-btn go" onclick="kjStart('normal')">ドリル スタート(10もん)</button>
@@ -153,9 +159,8 @@
     <h3>ちずパズル じこベスト</h3>
     <table id="rec-map" class="rec-table"></table>
 
-    <h3>かんじ(3年生)</h3>
-    <div class="gauge"><div id="rec-kj-fill" class="gauge-fill"></div></div>
-    <div id="rec-kj-text" class="note"></div>
+    <h3>かんじ</h3>
+    <div id="rec-kj-list"></div>
 
     <h3>れんしゅうカレンダー</h3>
     <div id="rec-cal"></div>
@@ -167,11 +172,13 @@
   </div>
 </section>
 
-<script src="kanji_data_g3.js"></script>
-<script src="japan_map_data.js"></script>
-<script src="app.js"></script>
-<script src="hyakumasu.js"></script>
-<script src="kanji.js"></script>
-<script src="map.js"></script>
+<script src="kanji_data_g1.js?v=2"></script>
+<script src="kanji_data_g2.js?v=2"></script>
+<script src="kanji_data_g3.js?v=2"></script>
+<script src="japan_map_data.js?v=2"></script>
+<script src="app.js?v=2"></script>
+<script src="hyakumasu.js?v=2"></script>
+<script src="kanji.js?v=2"></script>
+<script src="map.js?v=2"></script>
 </body>
 </html>

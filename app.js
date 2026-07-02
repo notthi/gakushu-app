@@ -129,11 +129,13 @@ function renderRecords() {
   }
   document.getElementById('rec-map').innerHTML = mpHtml;
 
-  // 漢字ゲージ
-  const prog = kjProgress();
-  document.getElementById('rec-kj-fill').style.width = (prog.mastered / prog.total * 100) + '%';
-  document.getElementById('rec-kj-text').textContent =
-    'おぼえた:' + prog.mastered + '字 / ' + prog.total + '字 (にがて:' + prog.nigate + '字)';
+  // 漢字ゲージ(学年ごと)
+  document.getElementById('rec-kj-list').innerHTML = [1, 2, 3].map(g => {
+    const prog = kjProgressOf(g);
+    return '<div class="note" style="margin-bottom:2px">' + KJ_GRADES[g].label + '</div>' +
+      '<div class="gauge"><div class="gauge-fill" style="width:' + (prog.mastered / prog.total * 100) + '%"></div></div>' +
+      '<div class="note" style="margin-bottom:10px">おぼえた:' + prog.mastered + '字 / ' + prog.total + '字 (にがて:' + prog.nigate + '字)</div>';
+  }).join('');
 
   renderCalendar();
 

@@ -1,8 +1,13 @@
 // 漢字れんしゅう(読み3択クイズ)
 
+const KJ_GRADES = {
+  1: { data: KANJI_G1, key: 'kanjiState_g1', label: '1年生' },
+  2: { data: KANJI_G2, key: 'kanjiState_g2', label: '2年生' },
+  3: { data: KANJI_G3, key: 'kanjiState_g3', label: '3年生' }
+};
+
 const KJ = {
-  data: KANJI_G3,
-  stateKey: 'kanjiState_g3',
+  grade: store.get('kjGrade', 1),
   drillType: 'normal',
   queue: [],       // 出題する漢字エントリの配列
   qIdx: 0,
@@ -12,35 +17,54 @@ const KJ = {
   choices: []
 };
 
-function kjState() { return store.get(KJ.stateKey, {}); }
+function kjDataOf(g) { return KJ_GRADES[g].data; }
+function kjStateOf(g) { return store.get(KJ_GRADES[g].key, {}); }
 
-function kjProgress() {
-  const st = kjState();
+function kjProgressOf(g) {
+  const data = kjDataOf(g);
+  const st = kjStateOf(g);
   let mastered = 0, nigate = 0;
-  for (const e of KJ.data) {
+  for (const e of data) {
     const s = st[e.k];
     if (!s || !s.seen) continue;
     if (s.streak >= 2) mastered++;
     else if (s.streak === 0) nigate++;
   }
-  return { mastered: mastered, nigate: nigate, total: KJ.data.length };
+  return { mastered: mastered, nigate: nigate, total: data.length };
 }
+
+function kjState() { return kjStateOf(KJ.grade); }
+function kjProgress() { return kjProgressOf(KJ.grade); }
 
 function kjNigatePool() {
   const st = kjState();
-  return KJ.data.filter(e => {
+  return kjDataOf(KJ.grade).filter(e => {
     const s = st[e.k];
     return s && s.seen > 0 && s.streak === 0;
   });
 }
 
-function kjBackToMenu() {
-  ['kj-quiz', 'kj-result', 'kj-nigate'].forEach(id => document.getElementById(id).classList.add('hidden'));
-  document.getElementById('kj-menu').classList.remove('hidden');
+function kjSetGrade(g) {
+  KJ.grade = g;
+  store.set('kjGrade', g);
+  document.querySelectorAll('#kj-grade-row .chip').forEach(c => c.classList.toggle('sel', Number(c.dataset.grade) === g));
+  kjRefreshMenu();
+}
+
+function kjRefreshMenu() {
+  document.getElementById('kj-menu-title').textContent =
+    '✏️ かんじれんしゅう(' + KJ_GRADES[KJ.grade].label + ')';
   const prog = kjProgress();
   document.getElementById('kj-gauge-fill').style.width = (prog.mastered / prog.total * 100) + '%';
   document.getElementById('kj-gauge-text').textContent =
     'おぼえた:' + prog.mastered + '字 / ' + prog.total + '字';
+}
+
+function kjBackToMenu() {
+  ['kj-quiz', 'kj-result', 'kj-nigate'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('kj-menu').classList.remove('hidden');
+  document.querySelectorAll('#kj-grade-row .chip').forEach(c => c.classList.toggle('sel', Number(c.dataset.grade) === KJ.grade));
+  kjRefreshMenu();
 }
 
 // 苦手な字ほど出やすい重みづけ
@@ -53,7 +77,7 @@ function kjWeight(s) {
 
 function kjPickQueue(count) {
   const st = kjState();
-  const pool = KJ.data.map(e => ({ e: e, w: kjWeight(st[e.k]) }));
+  const pool = kjDataOf(KJ.grade).map(e => ({ e: e, w: kjWeight(st[e.k]) }));
   const picked = [];
   while (picked.length < count && pool.length > 0) {
     const total = pool.reduce((a, p) => a + p.w, 0);
@@ -92,9 +116,10 @@ function kjStart(type) {
 
 function kjMakeChoices(entry) {
   // 正解と長さの近い読みをダミーにえらぶ
-  let cands = KJ.data.filter(e =>
+  const data = kjDataOf(KJ.grade);
+  let cands = data.filter(e =>
     e.r !== entry.r && Math.abs(e.r.length - entry.r.length) <= 1);
-  if (cands.length < 2) cands = KJ.data.filter(e => e.r !== entry.r);
+  if (cands.length < 2) cands = data.filter(e => e.r !== entry.r);
   const used = new Set([entry.r]);
   const wrongs = [];
   for (const e of shuffle(cands)) {
@@ -140,7 +165,7 @@ function kjAnswer(i) {
   if (ok) s.streak++;
   else { s.streak = 0; s.ng++; }
   st[entry.k] = s;
-  store.set(KJ.stateKey, st);
+  store.set(KJ_GRADES[KJ.grade].key, st);
 
   const fb = document.getElementById('kj-feedback');
   if (ok) {
