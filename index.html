@@ -19,6 +19,8 @@
     <button class="big-btn go" onclick="show('screen-hyakumasu')">🔢 100ますけいさん</button>
     <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう</button>
     <button class="big-btn go3" onclick="show('screen-map')">🗾 ちずパズル</button>
+    <button class="big-btn go4" onclick="show('screen-typing')">⌨️ ローマじタイピング</button>
+    <button class="big-btn" onclick="show('screen-ranking')">🏅 ランキング</button>
     <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
   </div>
   <button id="sound-toggle" class="text-btn" onclick="toggleSound()">🔊 おと:ON</button>
@@ -148,6 +150,49 @@
 
 </section>
 
+<!-- ローマ字タイピング -->
+<section id="screen-typing" class="screen">
+
+  <div id="ty-setup" class="panel">
+    <h2>⌨️ ローマじタイピング</h2>
+    <p class="note">ひらがなを ローマじで うとう!(10もん)<br>し=si/shi どちらでも OK</p>
+    <div class="choice-row" id="ty-course-row">
+      <button data-course="easy" class="chip sel">かんたん</button>
+      <button data-course="normal" class="chip">ふつう</button>
+    </div>
+    <div id="ty-best-info" class="best-info"></div>
+    <button class="big-btn go" onclick="tyStart()">スタート!</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="ty-play" class="panel hidden">
+    <div class="play-head">
+      <span id="ty-timer" class="timer">0.0びょう</span>
+      <span id="ty-progress" class="mp-info"></span>
+      <span id="ty-miss" class="mp-info"></span>
+      <button class="text-btn" onclick="tyQuit()">やめる</button>
+    </div>
+    <div id="ty-result" class="result-box hidden"></div>
+    <div id="ty-card">
+      <div id="ty-kana"></div>
+      <div id="ty-romaji"></div>
+    </div>
+    <div id="ty-keyboard"></div>
+  </div>
+
+</section>
+
+<!-- ランキング -->
+<section id="screen-ranking" class="screen">
+  <div class="panel">
+    <h2>🏅 ランキング</h2>
+    <div class="choice-row" id="rank-game-row"></div>
+    <div class="rank-grid" id="rank-sub-row"></div>
+    <div id="rank-list"></div>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+</section>
+
 <!-- きろく -->
 <section id="screen-records" class="screen">
   <div class="panel">
@@ -158,6 +203,9 @@
 
     <h3>ちずパズル じこベスト</h3>
     <table id="rec-map" class="rec-table"></table>
+
+    <h3>タイピング じこベスト</h3>
+    <table id="rec-ty" class="rec-table"></table>
 
     <h3>かんじ</h3>
     <div id="rec-kj-list"></div>
@@ -172,13 +220,15 @@
   </div>
 </section>
 
-<script src="kanji_data_g1.js?v=2"></script>
-<script src="kanji_data_g2.js?v=2"></script>
-<script src="kanji_data_g3.js?v=2"></script>
-<script src="japan_map_data.js?v=2"></script>
-<script src="app.js?v=2"></script>
-<script src="hyakumasu.js?v=2"></script>
-<script src="kanji.js?v=2"></script>
-<script src="map.js?v=2"></script>
+<script src="kanji_data_g1.js?v=3"></script>
+<script src="kanji_data_g2.js?v=3"></script>
+<script src="kanji_data_g3.js?v=3"></script>
+<script src="japan_map_data.js?v=3"></script>
+<script src="typing_words.js?v=3"></script>
+<script src="app.js?v=3"></script>
+<script src="hyakumasu.js?v=3"></script>
+<script src="kanji.js?v=3"></script>
+<script src="map.js?v=3"></script>
+<script src="typing.js?v=3"></script>
 </body>
 </html>

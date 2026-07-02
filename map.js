@@ -294,6 +294,7 @@ function mpFinish() {
     (penalty > 0 ? '(ミス' + (MP.miss + MP.hints) + 'かい +' + (penalty / 1000) + 'びょう)' : '(ノーミス!)') +
     '</div>' +
     '<div class="r-msg">' + msg + '</div>' +
+    rkBuildUI('mp_' + MP.mode, ms) +
     '<button class="big-btn go" onclick="mpStart()">もういちど</button>' +
     '<button class="big-btn" onclick="mpShowSetup()">ちほうを かえる</button>' +
     '<button class="text-btn" onclick="show(\'screen-home\')">← ホームへ</button>';

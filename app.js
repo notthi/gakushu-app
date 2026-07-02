@@ -18,6 +18,8 @@ function show(id) {
   if (id === 'screen-hyakumasu') hmShowSetup();
   if (id === 'screen-kanji') kjBackToMenu();
   if (id === 'screen-map') mpShowSetup();
+  if (id === 'screen-typing') tyShowSetup();
+  if (id === 'screen-ranking') renderRanking();
   if (id === 'screen-home') renderHome();
 }
 
@@ -30,6 +32,10 @@ function stampToday() {
   const days = store.get('practiceDays', []);
   const t = todayStr();
   if (!days.includes(t)) { days.push(t); store.set('practiceDays', days); }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function shuffle(arr) {
@@ -73,6 +79,124 @@ function toggleSound() {
 }
 function updateSoundBtn() {
   document.getElementById('sound-toggle').textContent = soundOn ? '🔊 おと:ON' : '🔇 おと:OFF';
+}
+
+// ---- ランキング(名前つき記録) ----
+// rankings: { 種目キー: [{name, ms, d}] } を良い順に最大10件保存
+const RK = { pending: null, names: [] };
+const RK_MAX = 10;
+
+function rkAdd(key, name, ms) {
+  const rankings = store.get('rankings', {});
+  const list = rankings[key] || [];
+  const entry = { name: name, ms: ms, d: todayStr() };
+  list.push(entry);
+  list.sort((a, b) => a.ms - b.ms);
+  if (list.length > RK_MAX) list.length = RK_MAX;
+  rankings[key] = list;
+  store.set('rankings', rankings);
+  return list.indexOf(entry) + 1; // 0 = ランク外
+}
+
+// 結果画面に埋めこむ「だれの きろく?」登録UI
+function rkBuildUI(key, ms) {
+  RK.pending = { key: key, ms: ms };
+  RK.names = store.get('players', []);
+  let html = '<div class="rk-area" id="rk-area"><p class="note">🏅 ランキングに とうろく!だれの きろく?</p><div class="rk-names">';
+  RK.names.forEach((n, i) => {
+    html += '<button class="chip" onclick="rkPick(' + i + ')">' + escapeHtml(n) + '</button>';
+  });
+  html += '<button class="chip rk-new-btn" onclick="rkShowNew()">+ あたらしい なまえ</button></div>';
+  html += '<div class="rk-new hidden" id="rk-new">' +
+    '<input id="rk-name-input" maxlength="8" placeholder="なまえ">' +
+    '<button class="chip sel" onclick="rkCommitNew()">とうろく</button></div></div>';
+  return html;
+}
+
+function rkPick(i) { rkCommit(RK.names[i]); }
+
+function rkShowNew() {
+  document.getElementById('rk-new').classList.remove('hidden');
+  document.getElementById('rk-name-input').focus();
+}
+
+function rkCommitNew() {
+  const v = document.getElementById('rk-name-input').value.trim();
+  if (!v) return;
+  rkCommit(v);
+}
+
+function rkCommit(name) {
+  if (!RK.pending) return;
+  const players = store.get('players', []).filter(n => n !== name);
+  players.unshift(name);
+  if (players.length > 8) players.length = 8;
+  store.set('players', players);
+
+  const rank = rkAdd(RK.pending.key, name, RK.pending.ms);
+  RK.pending = null;
+  const area = document.getElementById('rk-area');
+  if (area) {
+    area.innerHTML = rank >= 1
+      ? '<p class="rk-done">' + (rank === 1 ? '👑 ' : '🏅 ') + escapeHtml(name) + ':ランキング ' + rank + 'い!</p>'
+      : '<p class="rk-done">' + escapeHtml(name) + ' の きろくを のこしたよ(トップ10まで あとすこし!)</p>';
+  }
+  playCorrect();
+}
+
+// ---- ランキング画面 ----
+const RKV = { game: 'hm', sub: null };
+
+function rankDef() {
+  const hmSubs = [];
+  for (const mode of ['add', 'sub', 'mul']) {
+    for (const size of [10, 5]) {
+      hmSubs.push({ key: 'hm_' + mode + '_' + size, label: HM_MODE_LABEL[mode] + ' ' + (size * size) + 'ます' });
+    }
+  }
+  return [
+    { id: 'hm', label: '100ます', subs: hmSubs },
+    { id: 'mp', label: 'ちずパズル', subs: ['all', 'r0', 'r1', 'r2', 'r3', 'r4', 'r5'].map(m => ({ key: 'mp_' + m, label: mpModeLabel(m) })) },
+    { id: 'ty', label: 'タイピング', subs: [{ key: 'ty_easy', label: 'かんたん' }, { key: 'ty_normal', label: 'ふつう' }] }
+  ];
+}
+
+function rankSelectGame(id) {
+  RKV.game = id;
+  RKV.sub = null;
+  renderRanking();
+}
+function rankSelectSub(key) {
+  RKV.sub = key;
+  renderRanking();
+}
+
+function renderRanking() {
+  const def = rankDef();
+  const game = def.find(g => g.id === RKV.game) || def[0];
+  if (!RKV.sub || !game.subs.some(s => s.key === RKV.sub)) RKV.sub = game.subs[0].key;
+
+  document.getElementById('rank-game-row').innerHTML = def.map(g =>
+    '<button class="chip' + (g.id === game.id ? ' sel' : '') + '" onclick="rankSelectGame(\'' + g.id + '\')">' + g.label + '</button>'
+  ).join('');
+  document.getElementById('rank-sub-row').innerHTML = game.subs.map(s =>
+    '<button class="chip' + (s.key === RKV.sub ? ' sel' : '') + '" onclick="rankSelectSub(\'' + s.key + '\')">' + s.label + '</button>'
+  ).join('');
+
+  const list = store.get('rankings', {})[RKV.sub] || [];
+  const el = document.getElementById('rank-list');
+  if (list.length === 0) {
+    el.innerHTML = '<p class="note">まだ きろくが ないよ。<br>あそんで なまえを とうろくしよう!</p>';
+    return;
+  }
+  const medals = ['🥇', '🥈', '🥉'];
+  el.innerHTML = list.map((e, i) =>
+    '<div class="rank-item' + (i === 0 ? ' top' : '') + '">' +
+    '<span class="rank-pos">' + (medals[i] || (i + 1) + 'い') + '</span>' +
+    '<span class="rank-name">' + escapeHtml(e.name) + '</span>' +
+    '<span class="rank-time">' + fmtTime(e.ms) + '</span>' +
+    '<span class="rank-date">' + e.d.slice(5).replace('-', '/') + '</span></div>'
+  ).join('');
 }
 
 // ---- ホーム ----
@@ -129,6 +253,12 @@ function renderRecords() {
   }
   document.getElementById('rec-map').innerHTML = mpHtml;
 
+  // タイピングのベスト
+  const tyBest = store.get('tyBest', {});
+  document.getElementById('rec-ty').innerHTML =
+    '<tr><th>かんたん</th><td>' + (tyBest.easy ? fmtTime(tyBest.easy.ms) : 'ー') + '</td>' +
+    '<th>ふつう</th><td>' + (tyBest.normal ? fmtTime(tyBest.normal.ms) : 'ー') + '</td></tr>';
+
   // 漢字ゲージ(学年ごと)
   document.getElementById('rec-kj-list').innerHTML = [1, 2, 3].map(g => {
     const prog = kjProgressOf(g);
@@ -148,7 +278,11 @@ function renderRecords() {
     d: h.d,
     text: '🗾 ' + mpModeLabel(h.mode) + ' ' + fmtTime(h.ms) + (h.miss > 0 ? '(ミス' + h.miss + ')' : '(ノーミス)')
   }));
-  const hist = hmHist.concat(mpHist).sort((a, b) => a.d < b.d ? -1 : 1).slice(-10).reverse();
+  const tyHist = store.get('tyHistory', []).map(h => ({
+    d: h.d,
+    text: '⌨️ ' + TY_COURSE_LABEL[h.course] + ' ' + fmtTime(h.ms) + (h.miss > 0 ? '(ミス' + h.miss + ')' : '(ノーミス)')
+  }));
+  const hist = hmHist.concat(mpHist, tyHist).sort((a, b) => a.d < b.d ? -1 : 1).slice(-10).reverse();
   const hEl = document.getElementById('rec-history');
   if (hist.length === 0) {
     hEl.innerHTML = '<p class="note">まだ きろくが ないよ</p>';
@@ -183,6 +317,17 @@ function renderCalendar() {
 
 // ---- 物理キーボード(Chromebook用) ----
 document.addEventListener('keydown', (e) => {
+  // 名前入力中はゲーム側で拾わない
+  if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+    if (e.key === 'Enter') { rkCommitNew(); e.preventDefault(); }
+    return;
+  }
+  const tyPlaying = document.getElementById('screen-typing').classList.contains('active') && TY.playing;
+  if (tyPlaying) {
+    const k = e.key.toLowerCase();
+    if (/^[a-z]$/.test(k) && !e.ctrlKey && !e.metaKey && !e.altKey) { tyKey(k); e.preventDefault(); }
+    return;
+  }
   const hmPlaying = document.getElementById('screen-hyakumasu').classList.contains('active') &&
     !document.getElementById('hm-play').classList.contains('hidden') && HM.playing;
   if (hmPlaying) {

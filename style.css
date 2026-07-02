@@ -36,6 +36,8 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 .big-btn.go2:active { box-shadow: 0 1px 0 #7cb342; }
 .big-btn.go3  { background: #ffcc80; color: #7a4a00; box-shadow: 0 4px 0 #fb8c00; }
 .big-btn.go3:active { box-shadow: 0 1px 0 #fb8c00; }
+.big-btn.go4  { background: #b39ddb; color: #311b62; box-shadow: 0 4px 0 #7e57c2; }
+.big-btn.go4:active { box-shadow: 0 1px 0 #7e57c2; }
 
 .text-btn {
   display: block; margin: 14px auto 4px; padding: 8px 16px;
@@ -161,6 +163,50 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 #mp-piece-name { font-size: 22px; font-weight: bold; text-align: center; min-width: 90px; }
 #mp-piece-name small { font-size: 13px; color: #777; font-weight: normal; }
 .hint-btn { width: auto; max-width: none; margin: 0; padding: 10px 12px; font-size: 15px; background: #fff59d; box-shadow: 0 3px 0 #fbc02d; color: #7a5c00; }
+
+/* --- ローマ字タイピング --- */
+#ty-card { text-align: center; margin: 20px 0; }
+#ty-kana { font-size: 44px; font-weight: bold; letter-spacing: 6px; margin-bottom: 8px; }
+#ty-romaji {
+  font-family: Consolas, Menlo, monospace; font-size: 30px; letter-spacing: 2px;
+  min-height: 40px; border-radius: 10px; display: inline-block; padding: 4px 16px; background: #fff;
+}
+#ty-romaji .done { color: #43a047; font-weight: bold; }
+#ty-romaji .rest { color: #aaa; }
+#ty-romaji.flash-ng { animation: ty-flash .3s; }
+@keyframes ty-flash { 0% { background: #ffcdd2; } 100% { background: #fff; } }
+
+#ty-keyboard { max-width: 440px; margin: 10px auto; user-select: none; }
+.ty-krow { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+.ty-key {
+  flex: 1; max-width: 42px; padding: 12px 0; font-size: 18px; font-weight: bold;
+  border: none; border-radius: 8px; background: #fff; box-shadow: 0 2px 0 #ccc;
+  cursor: pointer; touch-action: manipulation; color: #333;
+}
+.ty-key:active { transform: translateY(2px); box-shadow: none; background: #cfe9ff; }
+
+/* --- 名前登録・ランキング --- */
+.rk-area { border-top: 2px dotted #ffcc80; margin-top: 8px; padding-top: 4px; }
+.rk-names { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 6px 0; }
+.rk-new-btn { border-style: dashed; }
+.rk-new { display: flex; justify-content: center; gap: 6px; margin: 8px 0; }
+.rk-new input {
+  font-size: 18px; padding: 8px 10px; border: 2px solid #90caf9; border-radius: 10px;
+  width: 150px; text-align: center;
+}
+.rk-done { font-size: 19px; font-weight: bold; color: #e65100; text-align: center; margin: 8px 0; }
+
+.rank-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 360px; margin: 6px auto 14px; }
+.rank-grid .chip { padding: 9px 4px; font-size: 14px; }
+.rank-item {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff; border-radius: 10px; padding: 9px 12px; margin: 5px auto; max-width: 400px; font-size: 16px;
+}
+.rank-item.top { border: 2px solid #ffd54f; background: #fffde7; }
+.rank-pos { width: 42px; text-align: center; font-weight: bold; font-size: 18px; }
+.rank-name { flex: 1; font-weight: bold; }
+.rank-time { color: #e65100; font-weight: bold; }
+.rank-date { color: #999; font-size: 13px; }
 
 /* --- きろく --- */
 .rec-table { width: 100%; max-width: 400px; margin: 4px auto; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }

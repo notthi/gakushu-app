@@ -222,6 +222,7 @@ function hmFinish() {
     '<div class="r-time">' + fmtTime(ms) + '</div>' +
     '<div class="r-score">' + correct + ' / ' + total + ' せいかい</div>' +
     '<div class="r-msg">' + msg + '</div>' +
+    (perfect ? rkBuildUI('hm_' + HM.mode + '_' + n, ms) : '') +
     '<button class="big-btn go" onclick="hmStart()">もういちど</button>' +
     '<button class="big-btn" onclick="hmShowSetup()">しゅるいを かえる</button>' +
     '<button class="text-btn" onclick="show(\'screen-home\')">← ホームへ</button>';
