@@ -17,6 +17,7 @@ function show(id) {
   if (id === 'screen-records') renderRecords();
   if (id === 'screen-hyakumasu') hmShowSetup();
   if (id === 'screen-kanji') kjBackToMenu();
+  if (id === 'screen-map') mpShowSetup();
   if (id === 'screen-home') renderHome();
 }
 
@@ -113,6 +114,21 @@ function renderRecords() {
   }
   document.getElementById('rec-best').innerHTML = html;
 
+  // 地図パズルのベスト
+  const mpBest = store.get('mpBest', {});
+  const mpModes = ['all', 'r0', 'r1', 'r2', 'r3', 'r4', 'r5'];
+  let mpHtml = '';
+  for (let i = 0; i < mpModes.length; i += 2) {
+    mpHtml += '<tr>';
+    for (const mode of [mpModes[i], mpModes[i + 1]]) {
+      if (!mode) { mpHtml += '<th></th><td></td>'; continue; }
+      const b = mpBest[mode];
+      mpHtml += '<th>' + mpModeLabel(mode) + '</th><td>' + (b ? fmtTime(b.ms) : 'ー') + '</td>';
+    }
+    mpHtml += '</tr>';
+  }
+  document.getElementById('rec-map').innerHTML = mpHtml;
+
   // 漢字ゲージ
   const prog = kjProgress();
   document.getElementById('rec-kj-fill').style.width = (prog.mastered / prog.total * 100) + '%';
@@ -121,18 +137,23 @@ function renderRecords() {
 
   renderCalendar();
 
-  // 履歴
-  const hist = store.get('hmHistory', []).slice(-10).reverse();
+  // 履歴(100ます+地図パズル)
+  const hmHist = store.get('hmHistory', []).map(h => ({
+    d: h.d,
+    text: HM_MODE_LABEL[h.mode] + ' ' + (h.size * h.size) + 'ます ' + h.score + 'てん ' + fmtTime(h.ms)
+  }));
+  const mpHist = store.get('mpHistory', []).map(h => ({
+    d: h.d,
+    text: '🗾 ' + mpModeLabel(h.mode) + ' ' + fmtTime(h.ms) + (h.miss > 0 ? '(ミス' + h.miss + ')' : '(ノーミス)')
+  }));
+  const hist = hmHist.concat(mpHist).sort((a, b) => a.d < b.d ? -1 : 1).slice(-10).reverse();
   const hEl = document.getElementById('rec-history');
   if (hist.length === 0) {
     hEl.innerHTML = '<p class="note">まだ きろくが ないよ</p>';
   } else {
-    hEl.innerHTML = hist.map(h => {
-      const d = h.d.slice(5).replace('-', '/');
-      return '<div class="hist-item"><span class="h-date">' + d + '</span>' +
-        HM_MODE_LABEL[h.mode] + ' ' + (h.size * h.size) + 'ます ' +
-        h.score + 'てん ' + fmtTime(h.ms) + '</div>';
-    }).join('');
+    hEl.innerHTML = hist.map(h =>
+      '<div class="hist-item"><span class="h-date">' + h.d.slice(5).replace('-', '/') + '</span>' + h.text + '</div>'
+    ).join('');
   }
 }
 

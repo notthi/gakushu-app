@@ -18,6 +18,7 @@
   <div class="menu">
     <button class="big-btn go" onclick="show('screen-hyakumasu')">🔢 100ますけいさん</button>
     <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう(3年生)</button>
+    <button class="big-btn go3" onclick="show('screen-map')">🗾 ちずパズル</button>
     <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
   </div>
   <button id="sound-toggle" class="text-btn" onclick="toggleSound()">🔊 おと:ON</button>
@@ -97,6 +98,45 @@
 
 </section>
 
+<!-- 都道府県パズル -->
+<section id="screen-map" class="screen">
+
+  <div id="mp-setup" class="panel">
+    <h2>🗾 ちずパズル</h2>
+    <p class="note">けんの かたちを ちずに はめよう!<br>はんいを えらんでね</p>
+    <div class="mp-mode-grid" id="mp-mode-row">
+      <button data-mpmode="all" class="chip sel">ぜんこく47</button>
+      <button data-mpmode="r0" class="chip">北海道・東北</button>
+      <button data-mpmode="r1" class="chip">関東</button>
+      <button data-mpmode="r2" class="chip">中部</button>
+      <button data-mpmode="r3" class="chip">近畿</button>
+      <button data-mpmode="r4" class="chip">中国・四国</button>
+      <button data-mpmode="r5" class="chip">九州・沖縄</button>
+    </div>
+    <div id="mp-best-info" class="best-info"></div>
+    <p class="note">まちがえたり ヒントを つかうと +5びょう</p>
+    <button class="big-btn go" onclick="mpStart()">スタート!</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="mp-play" class="panel hidden">
+    <div class="play-head">
+      <span id="mp-timer" class="timer">0.0びょう</span>
+      <span id="mp-count" class="mp-info"></span>
+      <span id="mp-miss" class="mp-info"></span>
+      <button class="text-btn" onclick="mpQuit()">やめる</button>
+    </div>
+    <div id="mp-result" class="result-box hidden"></div>
+    <svg id="mp-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="mp-tray">
+      <svg id="mp-piece-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="mp-piece-name"></div>
+      <button class="big-btn hint-btn" onclick="mpHint()">💡 ヒント</button>
+    </div>
+  </div>
+
+</section>
+
 <!-- きろく -->
 <section id="screen-records" class="screen">
   <div class="panel">
@@ -104,6 +144,9 @@
 
     <h3>100ます じこベスト</h3>
     <table id="rec-best" class="rec-table"></table>
+
+    <h3>ちずパズル じこベスト</h3>
+    <table id="rec-map" class="rec-table"></table>
 
     <h3>かんじ(3年生)</h3>
     <div class="gauge"><div id="rec-kj-fill" class="gauge-fill"></div></div>
@@ -120,8 +163,10 @@
 </section>
 
 <script src="kanji_data_g3.js"></script>
+<script src="japan_map_data.js"></script>
 <script src="app.js"></script>
 <script src="hyakumasu.js"></script>
 <script src="kanji.js"></script>
+<script src="map.js"></script>
 </body>
 </html>

@@ -34,6 +34,8 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 .big-btn.go:active { box-shadow: 0 1px 0 #0288d1; }
 .big-btn.go2  { background: #aed581; color: #33511a; box-shadow: 0 4px 0 #7cb342; }
 .big-btn.go2:active { box-shadow: 0 1px 0 #7cb342; }
+.big-btn.go3  { background: #ffcc80; color: #7a4a00; box-shadow: 0 4px 0 #fb8c00; }
+.big-btn.go3:active { box-shadow: 0 1px 0 #fb8c00; }
 
 .text-btn {
   display: block; margin: 14px auto 4px; padding: 8px 16px;
@@ -114,6 +116,44 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
   padding: 8px 12px; margin: 4px; font-size: 18px;
 }
 .nigate-item small { color: #777; }
+
+/* --- 都道府県パズル --- */
+.mp-mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 340px; margin: 6px auto 14px; }
+.mp-mode-grid .chip { padding: 10px 4px; font-size: 15px; }
+.mp-mode-grid .chip:first-child { grid-column: 1 / -1; }
+
+.mp-info { font-size: 14px; font-weight: bold; color: #555; }
+
+#mp-svg {
+  display: block; width: 100%; max-width: 480px; max-height: 58vh;
+  margin: 0 auto; touch-action: none; overflow: visible;
+  background: #eaf6ff; border-radius: 12px;
+}
+.mp-boundary line { stroke: #b0bec5; stroke-width: 1.5; stroke-dasharray: 5 5; }
+.mp-pref { stroke-linejoin: round; }
+.mp-pref.inactive { fill: #dcdcdc; stroke: #c0c0c0; stroke-width: 1; }
+.mp-pref.active { fill: #ffffff; stroke: #cfcfcf; stroke-width: 1; }
+.mp-pref.placed { stroke: #ffffff; stroke-width: 1.2; }
+.mp-pref.hintflash { animation: mp-flash .4s ease-in-out 4; }
+@keyframes mp-flash {
+  0%, 100% { fill: #ffffff; }
+  50% { fill: #ff9800; }
+}
+.mp-ghost { fill: #4fc3f7; fill-opacity: .75; stroke: #0288d1; stroke-width: 1.5; pointer-events: none; }
+
+#mp-tray {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  max-width: 480px; margin: 8px auto; padding: 8px;
+  background: #fff; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.12);
+}
+#mp-piece-svg {
+  width: 120px; height: 100px; touch-action: none; cursor: grab;
+  background: #f2fbff; border: 2px dashed #90caf9; border-radius: 10px; overflow: hidden;
+}
+.mp-piece-shape { fill: #4fc3f7; stroke: #0288d1; stroke-width: 1.5; stroke-linejoin: round; pointer-events: none; }
+#mp-piece-name { font-size: 22px; font-weight: bold; text-align: center; min-width: 90px; }
+#mp-piece-name small { font-size: 13px; color: #777; font-weight: normal; }
+.hint-btn { width: auto; max-width: none; margin: 0; padding: 10px 12px; font-size: 15px; background: #fff59d; box-shadow: 0 3px 0 #fbc02d; color: #7a5c00; }
 
 /* --- きろく --- */
 .rec-table { width: 100%; max-width: 400px; margin: 4px auto; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
