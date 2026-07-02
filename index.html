@@ -127,7 +127,12 @@
       <button class="text-btn" onclick="mpQuit()">やめる</button>
     </div>
     <div id="mp-result" class="result-box hidden"></div>
-    <svg id="mp-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="mp-map-wrap">
+      <svg id="mp-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="mp-loupe" class="hidden">
+        <svg id="mp-loupe-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"><use href="#mp-map-content"/></svg>
+      </div>
+    </div>
     <div id="mp-tray">
       <svg id="mp-piece-svg" xmlns="http://www.w3.org/2000/svg"></svg>
       <div id="mp-piece-name"></div>

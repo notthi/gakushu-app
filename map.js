@@ -74,13 +74,13 @@ function mpStopTimer() {
 
 function mpBuildMap(activeSet) {
   const svg = document.getElementById('mp-svg');
-  let html = '<g transform="' + JAPAN_MAP.wrapTransform + '"><g transform="' + JAPAN_MAP.innerTransform + '">';
+  let html = '<g id="mp-map-content"><g transform="' + JAPAN_MAP.wrapTransform + '"><g transform="' + JAPAN_MAP.innerTransform + '">';
   html += '<g class="mp-boundary">' + JAPAN_MAP.boundary + '</g>';
   for (const p of JAPAN_MAP.prefs) {
     const cls = activeSet.has(p.code) ? 'mp-pref active' : 'mp-pref inactive';
     html += '<g id="mp-pref-' + p.code + '" class="' + cls + '" transform="translate(' + p.tx + ',' + p.ty + ')">' + p.shapes + '</g>';
   }
-  html += '</g></g><g id="mp-drag-layer"></g>';
+  html += '</g></g><g id="mp-drag-layer"></g></g>';
   svg.innerHTML = html;
 }
 
@@ -126,7 +126,12 @@ function mpMeasure(active) {
     const cx = m.a * bx + m.c * by + m.e;
     const cy = m.b * bx + m.d * by + m.f;
     const diag = Math.hypot(main.width, main.height);
-    MP.geo[p.code] = { cx, cy, thresh: Math.min(70, Math.max(26, diag * 0.5)), bbox: main };
+    MP.geo[p.code] = {
+      cx, cy,
+      thresh: Math.min(70, Math.max(26, diag * 0.5)),
+      bbox: main,
+      loupeSize: Math.min(260, Math.max(120, diag * 1.8))  // 拡大鏡に映す範囲(viewBox単位)
+    };
   }
 }
 
@@ -171,7 +176,24 @@ function mpDragStart(e) {
   const layer = document.getElementById('mp-drag-layer');
   layer.innerHTML = '<g id="mp-ghost" class="mp-ghost"><g>' + MP.target.shapes + '</g></g>';
   MP.ghost = document.getElementById('mp-ghost');
+  document.getElementById('mp-loupe').classList.remove('hidden');
   mpDragMove(e);
+}
+
+// 拡大鏡:ゴーストの位置を中心に部分拡大して、指の上あたりに表示する
+function mpLoupeUpdate(e, px, py) {
+  const loupe = document.getElementById('mp-loupe');
+  const L = MP.geo[MP.target.code].loupeSize;
+  document.getElementById('mp-loupe-svg').setAttribute('viewBox',
+    (px - L / 2) + ' ' + (py - L / 2) + ' ' + L + ' ' + L);
+  const r = document.getElementById('mp-map-wrap').getBoundingClientRect();
+  const size = loupe.offsetWidth;
+  let left = e.clientX - r.left - size / 2;
+  let top = e.clientY - r.top - size - 40;
+  left = Math.max(-10, Math.min(r.width - size + 10, left));
+  if (top < -20) top = e.clientY - r.top + 40; // 上にはみ出すなら指の下に
+  loupe.style.left = left + 'px';
+  loupe.style.top = top + 'px';
 }
 
 function mpDragMove(e) {
@@ -187,11 +209,13 @@ function mpDragMove(e) {
     m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')');
   MP.ghost.dataset.px = px;
   MP.ghost.dataset.py = py;
+  mpLoupeUpdate(e, px, py);
 }
 
 function mpDragEnd(e) {
   if (!MP.dragging) return;
   MP.dragging = false;
+  document.getElementById('mp-loupe').classList.add('hidden');
   const layer = document.getElementById('mp-drag-layer');
   if (!MP.ghost) { layer.innerHTML = ''; return; }
   const px = Number(MP.ghost.dataset.px), py = Number(MP.ghost.dataset.py);
