@@ -19,6 +19,7 @@ function show(id) {
   if (id === 'screen-kanji') kjBackToMenu();
   if (id === 'screen-map') mpShowSetup();
   if (id === 'screen-typing') tyShowSetup();
+  if (id === 'screen-eiken') ekBackToMenu();
   if (id === 'screen-ranking') renderRanking();
   if (id === 'screen-home') renderHome();
 }
@@ -267,6 +268,12 @@ function renderRecords() {
       '<div class="note" style="margin-bottom:10px">おぼえた:' + prog.mastered + '字 / ' + prog.total + '字 (にがて:' + prog.nigate + '字)</div>';
   }).join('');
 
+  // 英語ゲージ(英検5級)
+  const ekProg = ekProgress();
+  document.getElementById('rec-ek').innerHTML =
+    '<div class="gauge"><div class="gauge-fill" style="width:' + (ekProg.mastered / ekProg.total * 100) + '%"></div></div>' +
+    '<div class="note" style="margin-bottom:10px">おぼえた:' + ekProg.mastered + 'ご / ' + ekProg.total + 'ご (にがて:' + ekProg.nigate + 'ご)</div>';
+
   renderCalendar();
 
   // 履歴(100ます+地図パズル)
@@ -341,6 +348,13 @@ document.addEventListener('keydown', (e) => {
   if (kjActive) {
     if (e.key >= '1' && e.key <= '3') kjKeyChoice(Number(e.key) - 1);
     else if (e.key === 'Enter') kjKeyNext();
+    return;
+  }
+  const ekActive = document.getElementById('screen-eiken').classList.contains('active') &&
+    !document.getElementById('ek-quiz').classList.contains('hidden');
+  if (ekActive) {
+    if (e.key >= '1' && e.key <= '4') ekKeyChoice(Number(e.key) - 1);
+    else if (e.key === 'Enter') ekKeyNext();
   }
 });
 

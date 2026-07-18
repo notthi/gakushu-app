@@ -38,6 +38,8 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 .big-btn.go3:active { box-shadow: 0 1px 0 #fb8c00; }
 .big-btn.go4  { background: #b39ddb; color: #311b62; box-shadow: 0 4px 0 #7e57c2; }
 .big-btn.go4:active { box-shadow: 0 1px 0 #7e57c2; }
+.big-btn.go5  { background: #f48fb1; color: #5c0f2e; box-shadow: 0 4px 0 #ec407a; }
+.big-btn.go5:active { box-shadow: 0 1px 0 #ec407a; }
 
 .text-btn {
   display: block; margin: 14px auto 4px; padding: 8px 16px;
@@ -184,6 +186,36 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
   cursor: pointer; touch-action: manipulation; color: #333;
 }
 .ty-key:active { transform: translateY(2px); box-shadow: none; background: #cfe9ff; }
+
+/* --- 英検5級 --- */
+.ek-question { text-align: center; font-size: 44px; font-weight: bold; margin: 20px 8px 4px; }
+.ek-question.sentence { font-size: 24px; line-height: 1.7; }
+.ek-blank { color: #d32f2f; font-weight: bold; }
+.ek-blank.ok { color: #43a047; border-bottom: 3px solid #43a047; }
+.speak-btn {
+  font-size: 22px; border: none; background: #e3f2fd; border-radius: 50%;
+  width: 44px; height: 44px; cursor: pointer; vertical-align: middle;
+}
+#ek-choices { display: flex; flex-direction: column; gap: 10px; max-width: 340px; margin: 10px auto; }
+.choice-btn.ek { font-size: 19px; }
+.ek-jp { text-align: center; color: #777; font-size: 15px; font-weight: normal; margin: 4px 0; }
+.ek-jp.big { font-size: 20px; color: #333; font-weight: bold; }
+.ek-sort-jp { text-align: center; font-size: 22px; font-weight: bold; margin: 16px 8px 0; }
+#ek-sort-answer {
+  min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
+  background: #fff; border: 3px dashed #90caf9; border-radius: 14px;
+  padding: 10px; max-width: 440px; margin: 10px auto;
+}
+#ek-sort-answer.ok { border-color: #43a047; border-style: solid; background: #f1f8e9; }
+#ek-sort-answer.ng { border-color: #e53935; border-style: solid; background: #ffebee; }
+#ek-sort-pool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 440px; margin: 10px auto; }
+.sort-chip {
+  padding: 10px 14px; font-size: 20px; font-weight: bold;
+  border: 2px solid #90caf9; border-radius: 12px; background: #fff; cursor: pointer; color: #333;
+}
+.sort-chip.in-answer { border-color: #f57c00; background: #fff3e0; }
+.sort-chip.used { border-color: #ddd; background: #eee; color: #bbb; }
+.ek-end-mark { font-size: 24px; font-weight: bold; }
 
 /* --- 名前登録・ランキング --- */
 .rk-area { border-top: 2px dotted #ffcc80; margin-top: 8px; padding-top: 4px; }

@@ -7,7 +7,7 @@
 <title>がくしゅうアプリ</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -20,6 +20,7 @@
     <button class="big-btn go2" onclick="show('screen-kanji')">✏️ かんじれんしゅう</button>
     <button class="big-btn go3" onclick="show('screen-map')">🗾 ちずパズル</button>
     <button class="big-btn go4" onclick="show('screen-typing')">⌨️ ローマじタイピング</button>
+    <button class="big-btn go5" onclick="show('screen-eiken')">🔤 えいご(英検5級)</button>
     <button class="big-btn" onclick="show('screen-ranking')">🏅 ランキング</button>
     <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
   </div>
@@ -182,6 +183,66 @@
 
 </section>
 
+<!-- 英検5級 -->
+<section id="screen-eiken" class="screen">
+
+  <div id="ek-menu" class="panel">
+    <h2>🔤 えいご(英検5級)</h2>
+    <div class="gauge"><div id="ek-gauge-fill" class="gauge-fill"></div></div>
+    <div id="ek-gauge-text" class="note"></div>
+    <p class="note">たんごクイズの むき</p>
+    <div class="choice-row" id="ek-dir-row">
+      <button data-dir="e2j" class="chip sel" onclick="ekSetDir('e2j')">えいご→いみ</button>
+      <button data-dir="j2e" class="chip" onclick="ekSetDir('j2e')">いみ→えいご</button>
+    </div>
+    <button class="big-btn go" onclick="ekStart('word')">たんごクイズ(10もん)</button>
+    <button class="big-btn go2" onclick="ekStart('fill')">あなうめ もんだい(10もん)</button>
+    <button class="big-btn go3" onclick="ekStart('sort')">ならべかえ もんだい(5もん)</button>
+    <button class="big-btn go4" onclick="ekStart('nigate')">にがて とっくん</button>
+    <button class="big-btn" onclick="ekShowNigate()">📕 にがてちょう</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="ek-quiz" class="panel hidden">
+    <div class="play-head">
+      <span id="ek-progress" class="timer"></span>
+      <button class="text-btn" onclick="ekQuit()">やめる</button>
+    </div>
+    <div id="ek-question" class="ek-question"></div>
+    <p id="ek-sub" class="note"></p>
+    <div id="ek-choices"></div>
+    <div id="ek-feedback" class="kj-feedback"></div>
+  </div>
+
+  <div id="ek-sort" class="panel hidden">
+    <div class="play-head">
+      <span id="ek-sort-progress" class="timer"></span>
+      <button class="text-btn" onclick="ekQuit()">やめる</button>
+    </div>
+    <div id="ek-sort-jp" class="ek-sort-jp"></div>
+    <p class="note">たんごを タップして えいごの 文を つくろう!</p>
+    <div id="ek-sort-answer"></div>
+    <div id="ek-sort-pool"></div>
+    <div id="ek-sort-feedback" class="kj-feedback"></div>
+  </div>
+
+  <div id="ek-result" class="panel hidden">
+    <h2 id="ek-result-title"></h2>
+    <div id="ek-result-body"></div>
+    <button class="big-btn go" onclick="ekStart(EK.mode)">もういちど</button>
+    <button class="big-btn" onclick="ekBackToMenu()">えいごメニューへ</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="ek-nigate" class="panel hidden">
+    <h2>📕 にがてちょう(たんご)</h2>
+    <div id="ek-nigate-list"></div>
+    <button class="big-btn go4" onclick="ekStart('nigate')">にがて とっくん</button>
+    <button class="text-btn" onclick="ekBackToMenu()">← もどる</button>
+  </div>
+
+</section>
+
 <!-- ランキング -->
 <section id="screen-ranking" class="screen">
   <div class="panel">
@@ -210,6 +271,9 @@
     <h3>かんじ</h3>
     <div id="rec-kj-list"></div>
 
+    <h3>えいご(英検5級)</h3>
+    <div id="rec-ek"></div>
+
     <h3>れんしゅうカレンダー</h3>
     <div id="rec-cal"></div>
 
@@ -225,10 +289,12 @@
 <script src="kanji_data_g3.js?v=3"></script>
 <script src="japan_map_data.js?v=3"></script>
 <script src="typing_words.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="eiken_data.js?v=1"></script>
+<script src="app.js?v=4"></script>
 <script src="hyakumasu.js?v=3"></script>
 <script src="kanji.js?v=3"></script>
 <script src="map.js?v=3"></script>
 <script src="typing.js?v=3"></script>
+<script src="eiken.js?v=1"></script>
 </body>
 </html>
