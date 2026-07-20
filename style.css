@@ -40,6 +40,8 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 .big-btn.go4:active { box-shadow: 0 1px 0 #7e57c2; }
 .big-btn.go5  { background: #f48fb1; color: #5c0f2e; box-shadow: 0 4px 0 #ec407a; }
 .big-btn.go5:active { box-shadow: 0 1px 0 #ec407a; }
+.big-btn.go6  { background: #4db6ac; color: #fff; box-shadow: 0 4px 0 #00897b; }
+.big-btn.go6:active { box-shadow: 0 1px 0 #00897b; }
 
 .text-btn {
   display: block; margin: 14px auto 4px; padding: 8px 16px;
@@ -216,6 +218,13 @@ h3 { font-size: 16px; margin: 18px 0 6px; color: #f57c00; border-bottom: 2px dot
 .sort-chip.in-answer { border-color: #f57c00; background: #fff3e0; }
 .sort-chip.used { border-color: #ddd; background: #eee; color: #bbb; }
 .ek-end-mark { font-size: 24px; font-weight: bold; }
+
+/* --- タイマー --- */
+.tm-display {
+  text-align: center; font-size: 88px; font-weight: bold; color: #00897b;
+  font-variant-numeric: tabular-nums; margin: 40px 0 8px;
+}
+.tm-word { text-align: center; font-size: 34px; font-weight: bold; color: #333; min-height: 44px; }
 
 /* --- 名前登録・ランキング --- */
 .rk-area { border-top: 2px dotted #ffcc80; margin-top: 8px; padding-top: 4px; }

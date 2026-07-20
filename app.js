@@ -20,6 +20,7 @@ function show(id) {
   if (id === 'screen-map') mpShowSetup();
   if (id === 'screen-typing') tyShowSetup();
   if (id === 'screen-eiken') ekBackToMenu();
+  if (id === 'screen-timer') tmShowSetup();
   if (id === 'screen-ranking') renderRanking();
   if (id === 'screen-home') renderHome();
 }

@@ -21,6 +21,7 @@
     <button class="big-btn go3" onclick="show('screen-map')">🗾 ちずパズル</button>
     <button class="big-btn go4" onclick="show('screen-typing')">⌨️ ローマじタイピング</button>
     <button class="big-btn go5" onclick="show('screen-eiken')">🔤 えいご(英検5級)</button>
+    <button class="big-btn go6" onclick="show('screen-timer')">⏱️ タイマー</button>
     <button class="big-btn" onclick="show('screen-ranking')">🏅 ランキング</button>
     <button class="big-btn" onclick="show('screen-records')">🏆 きろく</button>
   </div>
@@ -243,6 +244,40 @@
 
 </section>
 
+<!-- タイマー -->
+<section id="screen-timer" class="screen">
+
+  <div id="tm-setup" class="panel">
+    <h2>⏱️ タイマー</h2>
+    <p class="note">3ぷんの タイマーだよ</p>
+    <p class="note">むきを えらんでね</p>
+    <div class="choice-row" id="tm-dir-row">
+      <button data-dir="down" class="chip sel" onclick="tmSetDir('down')">カウントダウン</button>
+      <button data-dir="up" class="chip" onclick="tmSetDir('up')">カウントアップ</button>
+    </div>
+    <button class="big-btn go" onclick="tmStart()">スタート!</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+  <div id="tm-play" class="panel hidden">
+    <div class="play-head">
+      <span></span>
+      <button class="text-btn" onclick="tmQuit()">やめる</button>
+    </div>
+    <div id="tm-display" class="tm-display"></div>
+    <div id="tm-word" class="tm-word"></div>
+  </div>
+
+  <div id="tm-result" class="panel hidden">
+    <h2 id="tm-result-title"></h2>
+    <p class="note">3ぷん たったよ!</p>
+    <button class="big-btn go" onclick="tmStart()">もういちど</button>
+    <button class="big-btn" onclick="tmBackToMenu()">タイマーメニューへ</button>
+    <button class="text-btn" onclick="show('screen-home')">← ホームへ</button>
+  </div>
+
+</section>
+
 <!-- ランキング -->
 <section id="screen-ranking" class="screen">
   <div class="panel">
@@ -296,5 +331,6 @@
 <script src="map.js?v=3"></script>
 <script src="typing.js?v=3"></script>
 <script src="eiken.js?v=1"></script>
+<script src="timer.js?v=1"></script>
 </body>
 </html>
