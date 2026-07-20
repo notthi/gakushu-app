@@ -14,20 +14,23 @@ function tmSetDir(d) {
   document.querySelectorAll('#tm-dir-row .chip').forEach(c => c.classList.toggle('sel', c.dataset.dir === d));
 }
 
-function tmPad(n) { return String(n).padStart(2, '0'); }
-function tmFmt(sec) { return Math.floor(sec / 60) + ':' + tmPad(sec % 60); }
+const TM_ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+  'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const TM_TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
+function tmTwoDigitWords(n) {
+  if (n < 20) return TM_ONES[n];
+  const t = Math.floor(n / 10), r = n % 10;
+  return TM_TENS[t] + (r ? '-' + TM_ONES[r] : '');
+}
+
+// 100以上は「1秒で読みきれる」よう "hundred" を省いた口語の言い方にする(180 → one eighty)
 function tmNumberWords(n) {
-  const ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-    'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-  const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-  if (n < 20) return ones[n];
-  if (n < 100) {
-    const t = Math.floor(n / 10), r = n % 10;
-    return tens[t] + (r ? '-' + ones[r] : '');
-  }
+  if (n < 100) return tmTwoDigitWords(n);
   const h = Math.floor(n / 100), r = n % 100;
-  return ones[h] + ' hundred' + (r ? ' ' + tmNumberWords(r) : '');
+  if (r === 0) return TM_ONES[h] + ' hundred';
+  if (r < 10) return TM_ONES[h] + ' oh ' + TM_ONES[r];
+  return TM_ONES[h] + ' ' + tmTwoDigitWords(r);
 }
 
 function tmSpeak(text) {
@@ -52,7 +55,7 @@ function tmShowSetup() {
 function tmBackToMenu() { tmShowSetup(); }
 
 function tmRender(sec, speak) {
-  document.getElementById('tm-display').textContent = tmFmt(sec);
+  document.getElementById('tm-display').textContent = String(sec);
   document.getElementById('tm-word').textContent = tmNumberWords(sec);
   if (speak) tmSpeak(tmNumberWords(sec));
 }
