@@ -5,7 +5,8 @@ const TM = {
   total: 180,
   cur: 0,
   playing: false,
-  intervalId: null
+  intervalId: null,
+  firstTick: false
 };
 
 function tmSetDir(d) {
@@ -64,6 +65,7 @@ function tmStart() {
   clearInterval(TM.intervalId);
   TM.cur = TM.dir === 'down' ? TM.total : 0;
   TM.playing = true;
+  TM.firstTick = true;
 
   ['tm-setup', 'tm-result'].forEach(id => document.getElementById(id).classList.add('hidden'));
   document.getElementById('tm-play').classList.remove('hidden');
@@ -73,6 +75,12 @@ function tmStart() {
 }
 
 function tmTick() {
+  // 最初の1秒は「Start!」を聞かせてから、開始時点の数字(180/0)を読み上げる(合計+1秒)
+  if (TM.firstTick) {
+    TM.firstTick = false;
+    tmRender(TM.cur, true);
+    return;
+  }
   if (TM.dir === 'down') {
     TM.cur--;
     if (TM.cur <= 0) {
